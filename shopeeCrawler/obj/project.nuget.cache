@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "8C7QiJhbfJ0OOagTzWeyClyXEw0qJkNO6/CJmkyOcjvuC8LFP3cC5nWYcKbKGvhkA0411b1gKUndzYHhDIjTlg==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Nhan Bui\\Documents\\Work\\Crawler\\shopeeCrawler\\shopeeCrawler.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Nhan Bui\\.nuget\\packages\\newtonsoft.json\\12.0.3\\newtonsoft.json.12.0.3.nupkg.sha512",
+    "C:\\Users\\Nhan Bui\\.nuget\\packages\\selenium.webdriver\\4.0.0\\selenium.webdriver.4.0.0.nupkg.sha512",
+    "C:\\Users\\Nhan Bui\\.nuget\\packages\\selenium.webdriver.chromedriver\\100.0.4896.6000\\selenium.webdriver.chromedriver.100.0.4896.6000.nupkg.sha512"
+  ],
+  "logs": []
+}
