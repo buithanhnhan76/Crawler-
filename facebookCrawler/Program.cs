@@ -31,8 +31,11 @@ namespace facebookCrawler
             browser.Navigate().GoToUrl("https://www.facebook.com/groups/606383689949601");
             System.Threading.Thread.Sleep(2000);
 
-            // Initial list
-            List<string> listUsersLink = new List<string>();
+            // Create file
+            System.IO.StreamWriter writer = new System.IO.StreamWriter("C:\\Users\\Nhan Bui\\Documents\\Work\\Crawler\\facebookCrawler\\result\\facebookCrawl.csv", false, System.Text.Encoding.UTF8);
+            // Title
+            writer.WriteLine("{0},{1},{2}","Tên user","Link user","Post content");
+            // System.Threading.Thread.Sleep(1000);
 
             // Scroll
             IJavaScriptExecutor js = (IJavaScriptExecutor) browser;
@@ -54,54 +57,54 @@ namespace facebookCrawler
             System.Threading.Thread.Sleep(2000);
             js.ExecuteScript("window.scrollTo({top: 4500,left:0, behavior: 'smooth'})");
             System.Threading.Thread.Sleep(2000);
-
+            
             //Select all content divs
             var contentDivs = browser.FindElements(By.XPath("//div[@class='du4w35lb k4urcfbm l9j0dhe7 sjgh65i0']"));
     
-
-            // get links
+            // get data
             foreach (var content in contentDivs)
             {
                 string outerHtml = content.GetAttribute("outerHTML");
+                // all crawl data
+                string userName, userLink, postContent;
                 // get all value between "" of href
-                string userLink = Regex.Match(outerHtml, "href=\"(.*?)\"").Groups[1].Value;
-                // get user id by using Regex, between user/ and /
-                string userId = Regex.Match(userLink,"user/(.*?)/").Groups[1].Value;
-                userLink = "https://facebook.com/" + userId;
-                listUsersLink.Add(userLink);                
-            }
-
-            // Create file
-            System.IO.StreamWriter writer = new System.IO.StreamWriter("C:\\Users\\Nhan Bui\\Documents\\Work\\Crawler\\facebookCrawler\\result\\facebookCrawl.csv", false, System.Text.Encoding.UTF8);
-            // Title
-            writer.WriteLine("{0},{1}","Tên user","Link user");
-            // System.Threading.Thread.Sleep(1000);
-
-            //Go to each user link
-            for (int i = 0; i < listUsersLink.Count; i++)
-            {
-                // Go to user link
-                browser.Navigate().GoToUrl(listUsersLink[i]);
-                System.Threading.Thread.Sleep(2000);
-                
-
-                // Initial varible
-                string userName;
-                try
-                {   
-                    var contentUsername = browser.FindElements(By.XPath("//h1[@class='gmql0nx0 l94mrbxd p1ri9a11 lzcic4wl']"));
-                    userName = contentUsername[0].Text;
+                // user name, get string between <strong><span> and </span></strong>
+                try{
+                    userName = Regex.Match(outerHtml, "<strong><span>(.*?)</span></strong>").Groups[1].Value;
                 }
-                catch
-                {
+                catch{
                     userName = "";
-                }    
+                }
+                // user link
+                try{
+                    userLink = Regex.Match(outerHtml, "href=\"(.*?)\"").Groups[1].Value;
+                    // get user id by using Regex, between user/ and /
+                    string userId = Regex.Match(userLink,"user/(.*?)/").Groups[1].Value;
+                    userLink = "https://facebook.com/" + userId;
+                }
+                catch{
+                    userLink = "";
+                }
 
+                try{
+                    postContent = Regex.Match(outerHtml,"<div dir=\"auto\" style=\"text-align: start;\">(.*?)</div>").Groups[1].Value;
+                    // in case post content include icon, hash tag, then delete it
+                    if(postContent.Contains("<span")){
+                            postContent = Regex.Match(outerHtml,"<div dir=\"auto\" style=\"text-align: start;\">(.*?)<span").Groups[1].Value;
+                        }
+                    // post dont have text content
+                    if(postContent.StartsWith("<a")){
+                        postContent = "";
+                    }
+                }
+                catch{
+                    postContent = "";
+                }
                 // write
-                writer.WriteLine("{0},{1}",userName, listUsersLink[i]);
+                writer.WriteLine("{0},{1},{2}",userName, userLink, postContent);
                 System.Threading.Thread.Sleep(1000);
-
-            } 
+            }
+          
             writer.Close();
         }
     }
