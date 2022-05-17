@@ -22,8 +22,8 @@ namespace facebookCrawler
             var password = browser.FindElements(By.CssSelector("input[name='pass']"));
             System.Threading.Thread.Sleep(2000);
             // username and password facebook
-            username[0].SendKeys("***REMOVED***");
-            password[0].SendKeys("***REMOVED***");
+            username[0].SendKeys("");
+            password[0].SendKeys("");
             // login button
             var loginButton = browser.FindElements(By.CssSelector("button[name='login']"));
             loginButton[0].Click();   
