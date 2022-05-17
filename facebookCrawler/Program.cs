@@ -21,13 +21,16 @@ namespace facebookCrawler
             var username = browser.FindElements(By.CssSelector("input[name='email']"));
             var password = browser.FindElements(By.CssSelector("input[name='pass']"));
             System.Threading.Thread.Sleep(2000);
+            // username and password facebook
             username[0].SendKeys("***REMOVED***");
             password[0].SendKeys("***REMOVED***");
+            // login button
             var loginButton = browser.FindElements(By.CssSelector("button[name='login']"));
             loginButton[0].Click();   
             System.Threading.Thread.Sleep(2000);
 
             // navigate to group facebook
+            // navigate to Dao Meo
             browser.Navigate().GoToUrl("https://www.facebook.com/groups/606383689949601");
             System.Threading.Thread.Sleep(2000);
 
@@ -35,7 +38,7 @@ namespace facebookCrawler
             System.IO.StreamWriter writer = new System.IO.StreamWriter("C:\\Users\\Nhan Bui\\Documents\\Work\\Crawler\\facebookCrawler\\result\\facebookCrawl.csv", false, System.Text.Encoding.UTF8);
             // Title
             writer.WriteLine("{0},{1},{2},{3},{4}","Tên user","Link user","Post content","Image content 1", "Image content 2");
-            // System.Threading.Thread.Sleep(1000);
+            System.Threading.Thread.Sleep(1000);
 
             // Scroll
             IJavaScriptExecutor js = (IJavaScriptExecutor) browser;
@@ -57,11 +60,19 @@ namespace facebookCrawler
             System.Threading.Thread.Sleep(2000);
             js.ExecuteScript("window.scrollTo({top: 18500,left:0, behavior: 'smooth'})");
             System.Threading.Thread.Sleep(2000);
-             js.ExecuteScript("window.scrollTo({top: 20500,left:0, behavior: 'smooth'})");
+            js.ExecuteScript("window.scrollTo({top: 20500,left:0, behavior: 'smooth'})");
             System.Threading.Thread.Sleep(2000);
-             js.ExecuteScript("window.scrollTo({top: 22500,left:0, behavior: 'smooth'})");
+            js.ExecuteScript("window.scrollTo({top: 22500,left:0, behavior: 'smooth'})");
             System.Threading.Thread.Sleep(2000);
-             js.ExecuteScript("window.scrollTo({top: 24500,left:0, behavior: 'smooth'})");
+            js.ExecuteScript("window.scrollTo({top: 24500,left:0, behavior: 'smooth'})");
+            System.Threading.Thread.Sleep(2000);
+            js.ExecuteScript("window.scrollTo({top: 26500,left:0, behavior: 'smooth'})");
+            System.Threading.Thread.Sleep(2000);
+            js.ExecuteScript("window.scrollTo({top: 28500,left:0, behavior: 'smooth'})");
+            System.Threading.Thread.Sleep(2000);
+            js.ExecuteScript("window.scrollTo({top: 30500,left:0, behavior: 'smooth'})");
+            System.Threading.Thread.Sleep(2000);
+            js.ExecuteScript("window.scrollTo({top: 32500,left:0, behavior: 'smooth'})");
             System.Threading.Thread.Sleep(2000);
             
             //Select all content divs
@@ -71,16 +82,16 @@ namespace facebookCrawler
             foreach (var content in contentDivs)
             {
                 string outerHtml = content.GetAttribute("outerHTML");
-                // all crawl data
-                string userName = "", userLink = "", postContent = "";
-                List<string> imgContents = new List<string>();
-                // get all value between "" of href
+                // all varible
+                string userName = "", userLink = "", postContent = "", imageContent1 = "", imageContent2 = "";
+
                 // user name, get string between <strong><span> and </span></strong>
                 try{
                     userName = Regex.Match(outerHtml, "<strong><span>(.*?)</span></strong>").Groups[1].Value;
                 }
                 catch{
                 }
+
                 // user link
                 try{
                     userLink = Regex.Match(outerHtml, "href=\"(.*?)\"").Groups[1].Value;
@@ -89,10 +100,11 @@ namespace facebookCrawler
                     userLink = "https://facebook.com/" + userId;
                 }
                 catch{
-                    userLink = "";
                 }
 
+                // post content
                 try{
+                    // use regex to get post content
                     postContent = Regex.Match(outerHtml,"<div dir=\"auto\" style=\"text-align: start;\">(.*?)</div>").Groups[1].Value;
                     // in case post content include icon, hash tag, then delete it
                     if(postContent.Contains("<span")){
@@ -109,62 +121,24 @@ namespace facebookCrawler
                     postContent = "";
                 }
 
-                // images in content post
-                // class is changed continuous
-                // try{
-                //     imageContent1 = Regex.Match(outerHtml,"class=\"i09qtzwb n7fi1qx3 datstx6m pmk7jnqg j9ispegn kr520xx4 k4urcfbm bixrwtb6\" referrerpolicy=\"origin-when-cross-origin\" src=\"(.*?)\">").Groups[1].Value;
-                    // delete amp; in url
-                //     imageContent1 = imageContent1.Replace("amp;","");
-                // }
-                // catch{
-                //     imageContent1 = "";
-                // }
-                // try{
-                        // there are two different class
-                //         imageContent1 = Regex.Match(outerHtml,"class=\"i09qtzwb n7fi1qx3 datstx6m pmk7jnqg j9ispegn kr520xx4 k4urcfbm bixrwtb6\" referrerpolicy=\"origin-when-cross-origin\" src=\"(.*?)\">").Groups[1].Value;
-                //         if(imageContent1 == "")
-                //         try{
-                //             imageContent1 = Regex.Match(outerHtml,"class=\"i09qtzwb n7fi1qx3 datstx6m pmk7jnqg j9ispegn kr520xx4 k4urcfbm\" referrerpolicy=\"origin-when-cross-origin\" src=\"(.*?)\">").Groups[1].Value;
-                //         }
-                //         catch{}
-                //         imageContent1 = imageContent1.Replace("amp;","");
-                // }
-                // catch{
-                // }
-                //  try{
-                        // there are two different class
-                //         imageContent2 = Regex.Match(outerHtml,"class=\"i09qtzwb n7fi1qx3 datstx6m pmk7jnqg j9ispegn kr520xx4 k4urcfbm bixrwtb6\" referrerpolicy=\"origin-when-cross-origin\" src=\"(.*?)\">").Groups[2].Value;
-                //         if(imageContent2 == "")
-                //         try{
-                //             imageContent2 = Regex.Match(outerHtml,"class=\"i09qtzwb n7fi1qx3 datstx6m pmk7jnqg j9ispegn kr520xx4 k4urcfbm\" referrerpolicy=\"origin-when-cross-origin\" src=\"(.*?)\">").Groups[2].Value;
-                //         }
-                //         catch{}
-                //         imageContent2 = imageContent2.Replace("amp;","");
-                // }
-                // catch{
-                // }
-                // try{
-                    var imgs = content.FindElements(By.XPath("//img[@class='i09qtzwb n7fi1qx3 datstx6m pmk7jnqg j9ispegn kr520xx4 k4urcfbm']"));
-                    if(imgs.Count == 0){
-                        try{
-                            imgs = content.FindElements(By.XPath("//img[@class='i09qtzwb n7fi1qx3 datstx6m pmk7jnqg j9ispegn kr520xx4 k4urcfbm bixrwtb6']"));
-                        }
-                        catch{
-
-                        }
-                    }
-                    
-                    foreach (var img in imgs){
-                        var imgOuterHtml = img.GetAttribute("outerHtml");
-                        var imgContent = Regex.Match(imgOuterHtml,"src=\"(.*?)\"").Groups[1].Value;
-                        imgContents.Add(imgContent);
-                    }
-                // }
-                // catch{
-
-                // }
+                // get image content
+                // image has two classes
+                var imgs = Regex.Matches(outerHtml,"class=\"i09qtzwb n7fi1qx3 datstx6m pmk7jnqg j9ispegn kr520xx4 k4urcfbm\" referrerpolicy=\"origin-when-cross-origin\" src=\"(.*?)\">");
+                if(imgs.Count == 0){
+                     try{
+                         imgs = Regex.Matches(outerHtml,"class=\"i09qtzwb n7fi1qx3 datstx6m pmk7jnqg j9ispegn kr520xx4 k4urcfbm bixrwtb6\" referrerpolicy=\"origin-when-cross-origin\" src=\"(.*?)\">");
+                     }
+                     catch{}
+                }
+                try{
+                    imageContent1 = imgs[0].Groups[1].Value;
+                    imageContent1 = imageContent1.Replace("amp;","");
+                    imageContent2 = imgs[1].Groups[1].Value;
+                    imageContent2 = imageContent2.Replace("amp;","");
+                }
+                catch{}
                 // write
-                writer.WriteLine("{0},{1},{2},{3},{4}",userName, userLink, postContent, imgContents[0],imgContents[1]);
+                writer.WriteLine("{0},{1},{2},{3},{4}",userName, userLink, postContent,imageContent1,imageContent2);
                 System.Threading.Thread.Sleep(1000);
             }
           
